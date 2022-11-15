@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Poll {
+  id                  String    @id @default(cuid())
+  title               String
+  description         String?
+  max_tracks          Int?
+  spotify_playlist_id String
+  spotify_user_id     String
+  state               PollState @default(OPEN)
+
+  @@map("polls")
+}
+
+// model PollMeta {
+//   id                     String @id @default(cuid())
+//   poll_id                String
+//   spotify_playlist_name  String
+//   spotify_playlist_cover String
+
+//   @@map("poll_metas")
+// }
+
+model PollVote {
+  id               String @id @default(cuid())
+  spotify_user_id  String
+  spotify_track_id String
+  poll_id          String
+
+  @@map("poll_votes")
+}
+
+enum PollState {
+  OPEN
+  CLOSED
+
+  @@map("poll_states")
+}
